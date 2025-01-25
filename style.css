@@ -1,90 +1,78 @@
-/* -- GRUNDDESIGN: NO-BULLSHIT DARK HACKER STYLE -- */
+/* -- ULTRACLEAN BLACK & BLUE STYLE, KEINE EFFEKTE -- */
+
+/* GRUNDDESIGN */
 body {
   margin: 0;
   padding: 0;
   font-family: Consolas, monospace;
-  background: #0d0d0d; /* Tiefdunkler Hintergrund */
-  color: #00ff9c;
+  background-color: #000; /* Tiefschwarz */
+  color: #00aaff;        /* Kräftiges Blau */
   text-align: center;
 }
 
-/* -- NAVIGATIONSBEREICH OBEN -- */
+/* NAVIGATION OBEN */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 24px;
-  background: linear-gradient(90deg, #1a1a1a, #262626);
-  box-shadow: 0 0 5px rgba(0,255,156,0.3);
+  background-color: #000;
+  border-bottom: 1px solid #00aaff;
 }
 .nav-title {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 .discord-btn {
   text-decoration: none;
   color: #fff;
-  background-color: #5865F2; /* Discord-Farbe */
+  background-color: #00aaff;
   padding: 8px 14px;
   border-radius: 4px;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-.discord-btn:hover {
-  background-color: #4752c4;
+  /* Keine Transition, kein Hover-Farbwechsel */
 }
 
-/* -- HEADER-STYLES -- */
+/* HEADER */
 header {
   margin-top: 30px;
   margin-bottom: 20px;
 }
 header h1 {
-  font-size: 2.2rem;
-  margin-bottom: 6px;
-  letter-spacing: 2px;
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
 header p {
   margin: 0;
-  color: #00e1ff;
+  color: #00e1ff; /* leicht abweichender Blauton */
 }
 
-/* -- UL UND LI FÜR DIE DOWNLOAD-LISTE -- */
+/* DATEILISTE */
 ul {
   list-style: none;
   padding: 0;
   margin: 40px auto;
-  width: auto;
   max-width: 600px;
   text-align: left;
 }
 li {
-  margin-bottom: 30px; /* Extra Platz */
+  margin-bottom: 25px; /* Platz für cleaner Look */
 }
 
-/* -- DATUM ÜBER DEM BUTTON -- */
+/* DATUMSBEREICH */
 .upload-date {
-  font-size: 0.85rem;
-  color: #adadad;
+  font-size: 0.9rem;
+  color: #999;
   margin-bottom: 5px;
 }
 
-/* -- DOWNLOAD-BUTTON -- */
+/* DOWNLOAD-BUTTON */
 .download-btn {
   display: inline-block;
   padding: 10px 16px;
   text-decoration: none;
-  color: #00ff9c;
-  border: 1px solid #00ff9c;
+  color: #00aaff;
+  border: 1px solid #00aaff;
   border-radius: 4px;
-  background: transparent;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  font-size: 1rem;
-  cursor: pointer;
-}
-.download-btn:hover {
-  background-color: #00ff9c;
-  color: #0d0d0d;
+  background-color: #000;
+  /* Keine Übergänge, kein Hover-Effekt */
 }
