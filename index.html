@@ -3,14 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titan Leaks</title>
+    <title>Titan Team</title>
 </head>
 <body>
     <h1>Titan Leaks</h1>
-    <ul>
-        <li><a href="./leak1.txt" download>Download Leak 1</a></li>
-        <li><a href="./leak2.pdf" download>Download Leak 2</a></li>
-        <li><a href="./leak3.zip" download>Download Leak 3</a></li>
+    <p>Hier sind die neuesten Dateien:</p>
+    <ul id="fileList">
+        <!-- Dateien werden hier dynamisch hinzugefügt -->
     </ul>
+
+    <script>
+        // GitHub-API für Dateiliste verwenden
+        async function fetchFiles() {
+            const repo = "titanxrio/titanteam"; // Dein Repo-Name
+            const branch = "main"; // Dein Branch
+            const folder = ""; // Ordner (leer lassen, wenn die Dateien im Root sind)
+
+            const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`);
+            const files = await response.json();
+
+            const fileList = document.getElementById("fileList");
+            fileList.innerHTML = "";
+
+            files.forEach(file => {
+                if (file.type === "file") {
+                    const listItem = document.createElement("li");
+                    listItem.innerHTML = `<a href="${file.download_url}" download>${file.name}</a>`;
+                    fileList.appendChild(listItem);
+                }
+            });
+        }
+
+        fetchFiles();
+    </script>
 </body>
 </html>
