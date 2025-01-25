@@ -1,35 +1,34 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Titan Leaks</title>
-  <!-- Verknüpfung mit style.css -->
+  <!-- Linking the CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- NAVIGATION OBEN MIT DISCORD-BUTTON -->
+  <!-- NAVIGATION WITH DISCORD BUTTON -->
   <nav>
     <div class="nav-title">Titan Leaks</div>
-    <!-- Discord-Link anpassen -->
-    <a class="discord-btn" href="https://discord.gg/DEIN-EINLADUNGS-LINK" target="_blank">Join Discord</a>
+    <!-- Adjust your Discord invite link here -->
+    <a class="discord-btn" href="https://discord.gg/YOUR-INVITE-LINK" target="_blank">Join Discord</a>
   </nav>
 
-  <!-- HAUPT-HEADER -->
+  <!-- HEADER SECTION -->
   <header>
     <h1>LEAKS & FILES</h1>
-    <p>Hier findest du die neuesten Dateien:</p>
+    <p>Here you'll find the latest files:</p>
   </header>
 
-  <!-- DYNAMISCHE DATEILISTE -->
+  <!-- DYNAMIC FILE LIST -->
   <ul id="fileList"></ul>
 
   <script>
-    const repo = "titanxrio/titanteam"; // Dein GitHub-Repository
-    const branch = "main";             // Branch-Name
-    const folder = "";                 // Ordner (leer lassen für root)
+    const repo = "titanxrio/titanteam";  // Your GitHub repository
+    const branch = "main";               // Branch name
+    const folder = "";                   // Folder (leave empty for root)
 
-    // Dateien beim Laden der Seite abrufen
     document.addEventListener("DOMContentLoaded", fetchFiles);
 
     async function fetchFiles() {
@@ -42,7 +41,7 @@
         fileList.innerHTML = "";
 
         for (const file of files) {
-          // Ignorieren von index.html & style.css
+          // Ignore index.html & style.css
           if (
             file.type === "file" &&
             file.name !== "index.html" &&
@@ -50,14 +49,15 @@
           ) {
             const li = document.createElement("li");
 
-            // Letztes Commit-Datum abrufen (ohne Uhrzeit)
+            // Fetch last commit date (without time)
             const commitDate = await fetchFileDate(file.path);
+            // Just the date (MM/DD/YYYY) in US-English style for example
             const displayDate = commitDate
-              ? new Date(commitDate).toLocaleDateString("de-DE")
-              : "unbekannt";
+              ? new Date(commitDate).toLocaleDateString("en-US")
+              : "unknown";
 
             li.innerHTML = `
-              <div class="upload-date">Hochgeladen: ${displayDate}</div>
+              <div class="upload-date">Uploaded: ${displayDate}</div>
               <a class="download-btn" href="${file.download_url}" download>
                 ${file.name}
               </a>
@@ -66,11 +66,11 @@
           }
         }
       } catch (error) {
-        console.error("Fehler beim Laden der Dateien:", error);
+        console.error("Error loading files:", error);
       }
     }
 
-    // Letztes Commit-Datum für die jeweilige Datei holen
+    // Retrieve the last commit date for each file
     async function fetchFileDate(path) {
       try {
         const commitsUrl = `https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(path)}&sha=${branch}&per_page=1`;
@@ -80,7 +80,7 @@
           return commitData[0].commit.author.date;
         }
       } catch (err) {
-        console.error("Fehler beim Laden des Commit-Datums:", err);
+        console.error("Error loading commit date:", err);
       }
       return null;
     }
