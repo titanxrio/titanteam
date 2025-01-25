@@ -1,10 +1,6 @@
-/* 
-   ULTRACLEAN BLACK & BLUE STYLE, 
-   now in English, plus a subtle hover effect 
-   (no cheap stuff). 
-*/
+/* Basic black & blue style with a mild fade-in for items */
 
-/* BASIC PAGE STYLE */
+/* BODY */
 body {
   margin: 0;
   padding: 0;
@@ -23,60 +19,72 @@ nav {
   background-color: #000;
   border-bottom: 1px solid #00aaff;
 }
-
 .nav-title {
   font-size: 1.4rem;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-
 .discord-btn {
   text-decoration: none;
   color: #fff;
   background-color: #00aaff;
   padding: 8px 14px;
   border-radius: 4px;
-  /* No transitions or fancy color changes on hover */
+}
+
+/* SUB-NAV / TAB BUTTONS */
+.subnav {
+  margin: 10px auto;
+}
+.tab-btn {
+  background-color: #000;
+  color: #00aaff;
+  border: 1px solid #00aaff;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+.tab-btn:hover {
+  background-color: #001f2f;
+  color: #66d9ff;
 }
 
 /* HEADER */
 header {
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
-
 header h1 {
   font-size: 2rem;
   margin-bottom: 6px;
 }
-
 header p {
   margin: 0;
   color: #00e1ff; /* Slightly different blue */
 }
 
 /* FILE LIST */
-ul {
+.file-list {
   list-style: none;
   padding: 0;
   margin: 40px auto;
   max-width: 600px;
   text-align: left;
 }
-
-li {
-  margin-bottom: 25px; /* Extra spacing for a cleaner look */
+.file-list li {
+  margin-bottom: 25px;
 }
 
-/* DATE ABOVE THE BUTTON */
+/* DATE */
 .upload-date {
   font-size: 0.9rem;
   color: #999;
   margin-bottom: 5px;
 }
 
-/* DOWNLOAD BUTTON WITH A SUBTLE HOVER */
+/* DOWNLOAD BUTTON */
 .download-btn {
   display: inline-block;
   padding: 10px 16px;
@@ -85,12 +93,20 @@ li {
   border: 1px solid #00aaff;
   border-radius: 4px;
   background-color: #000;
-  
-  /* SUBTLE HOVER: We'll do a slight background shift & text color shift */
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-
 .download-btn:hover {
-  background-color: #001f2f; /* a slightly darker blue-black */
-  color: #66d9ff;           /* a lighter shade of blue for text */
+  background-color: #001f2f;
+  color: #66d9ff;
+}
+
+/* FADE-IN ANIMATION FOR LI ITEMS */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.6s forwards; /* 0.6s fade, only once, forward fill */
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }
