@@ -8,50 +8,84 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- NAVIGATION WITH DISCORD BUTTON -->
+  <!-- TOP NAVIGATION -->
   <nav>
     <div class="nav-title">Titan Leaks</div>
-    <!-- Adjust your Discord invite link here -->
     <a class="discord-btn" href="https://discord.gg/YOUR-INVITE-LINK" target="_blank">Join Discord</a>
   </nav>
+
+  <!-- SUB-NAV TABS TO SWITCH BETWEEN TOOLS & LEAKS -->
+  <div class="subnav">
+    <button class="tab-btn" onclick="showTab('tools')">Tools</button>
+    <button class="tab-btn" onclick="showTab('leaks')">Leaks</button>
+  </div>
 
   <!-- HEADER SECTION -->
   <header>
     <h1>LEAKS & FILES</h1>
-    <p>Here you'll find the latest files:</p>
+    <p>Select a category above to see the latest files</p>
   </header>
 
-  <!-- DYNAMIC FILE LIST -->
-  <ul id="fileList"></ul>
+  <!-- TOOLS LIST -->
+  <ul id="toolsList" class="file-list" style="display: none;"></ul>
+  <!-- LEAKS LIST -->
+  <ul id="leaksList" class="file-list" style="display: none;"></ul>
 
   <script>
-    const repo = "titanxrio/titanteam";  // Your GitHub repository
-    const branch = "main";               // Branch name
-    const folder = "";                   // Folder (leave empty for root)
+    // Adjust these for your GitHub repository:
+    const repo = "titanxrio/titanteam";  // e.g. "username/reponame"
+    const branch = "main";               // branch name
+    // The two subfolders in your repo
+    const toolsFolder = "tools";
+    const leaksFolder = "leaks";
 
-    document.addEventListener("DOMContentLoaded", fetchFiles);
+    // On page load, fetch both Tools & Leaks
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchFiles(toolsFolder, "toolsList");
+      fetchFiles(leaksFolder, "leaksList");
+    });
 
-    async function fetchFiles() {
+    // Toggle tabs (Tools or Leaks)
+    function showTab(tabName) {
+      const toolsList = document.getElementById("toolsList");
+      const leaksList = document.getElementById("leaksList");
+
+      if (tabName === "tools") {
+        toolsList.style.display = "block";
+        leaksList.style.display = "none";
+      } else {
+        toolsList.style.display = "none";
+        leaksList.style.display = "block";
+      }
+    }
+
+    // Generic fetch function for a given folder (tools/leaks)
+    async function fetchFiles(folderName, listId) {
       try {
-        const response = await fetch(
-          `https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`
-        );
+        const url = `https://api.github.com/repos/${repo}/contents/${folderName}?ref=${branch}`;
+        const response = await fetch(url);
         const files = await response.json();
-        const fileList = document.getElementById("fileList");
-        fileList.innerHTML = "";
+        if (!Array.isArray(files)) {
+          console.error("No files array found in folder:", folderName);
+          return;
+        }
+
+        const list = document.getElementById(listId);
+        list.innerHTML = "";
 
         for (const file of files) {
-          // Ignore index.html & style.css
+          // We ignore index.html and style.css if they appear in these folders
           if (
             file.type === "file" &&
             file.name !== "index.html" &&
             file.name !== "style.css"
           ) {
             const li = document.createElement("li");
+            li.classList.add("fade-in"); // triggers the CSS fade-in
 
-            // Fetch last commit date (without time)
-            const commitDate = await fetchFileDate(file.path);
-            // Just the date (MM/DD/YYYY) in US-English style for example
+            // Get commit date for each file
+            const commitDate = await fetchFileDate(`${folderName}/${file.name}`);
+            // Format date as MM/DD/YYYY
             const displayDate = commitDate
               ? new Date(commitDate).toLocaleDateString("en-US")
               : "unknown";
@@ -62,25 +96,25 @@
                 ${file.name}
               </a>
             `;
-            fileList.appendChild(li);
+            list.appendChild(li);
           }
         }
       } catch (error) {
-        console.error("Error loading files:", error);
+        console.error("Error loading files for folder:", folderName, error);
       }
     }
 
-    // Retrieve the last commit date for each file
-    async function fetchFileDate(path) {
+    // Retrieve last commit date for a file
+    async function fetchFileDate(fullPath) {
       try {
-        const commitsUrl = `https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(path)}&sha=${branch}&per_page=1`;
+        const commitsUrl = `https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(fullPath)}&sha=${branch}&per_page=1`;
         const response = await fetch(commitsUrl);
         const commitData = await response.json();
         if (commitData && commitData.length > 0) {
           return commitData[0].commit.author.date;
         }
       } catch (err) {
-        console.error("Error loading commit date:", err);
+        console.error("Error fetching commit date:", err);
       }
       return null;
     }
