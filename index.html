@@ -4,172 +4,86 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Titan Leaks</title>
-  <style>
-    /* Allgemeines Body-Styling */
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;         /* Tiefschwarzer Hintergrund */
-      color: #00ff9c;          /* Giftgrüne Hacker-Farbe */
-      font-family: Consolas, monospace;
-    }
-
-    /* Navigation mit Discord-Button */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #111;
-      padding: 15px 20px;
-    }
-    .navbar-title {
-      font-size: 1.4rem;
-      color: #00ff9c;
-    }
-    .navbar-discord-btn {
-      background: #5865F2; /* Discord-Blau */
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-    .navbar-discord-btn:hover {
-      background: #4852c8; /* Minimal dunkler, kein Schnickschnack */
-    }
-
-    /* Headline */
-    h1 {
-      text-align: center;
-      margin: 40px 0 10px;
-      font-size: 2.5rem;
-      color: #00ff9c;
-    }
-    p.subtitle {
-      text-align: center;
-      margin: 10px 0 40px;
-      color: #aaa; /* Leicht abgesetzte Farbe */
-    }
-
-    /* Container für die File-Liste (damit es etwas zentriert ist) */
-    .file-list-container {
-      max-width: 600px;
-      margin: 0 auto 50px;
-      padding: 0 20px;
-    }
-
-    /* Liste selbst */
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      margin-bottom: 30px; /* Viel Platz zwischen den Items */
-    }
-
-    /* Kleiner Datums-Text */
-    .file-date {
-      display: block;
-      font-size: 0.8rem;
-      color: #999;
-      margin-bottom: 4px;
-    }
-
-    /* Download-Button – nüchtern, ohne Bling-Bling */
-    .download-btn {
-      display: inline-block;
-      text-decoration: none;
-      background: #111;
-      color: #00ff9c;
-      padding: 10px 15px;
-      border: 1px solid #00ff9c;
-      border-radius: 4px;
-    }
-    .download-btn:hover {
-      background: #00ff9c;
-      color: #000;
-    }
-  </style>
+  <!-- Verknüpfung mit style.css -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Navbar mit Discord-Button -->
-  <nav class="navbar">
-    <div class="navbar-title">🔥 Titan Leaks 🔥</div>
-    <a href="https://discord.gg/DEIN-EINLADUNGS-LINK" target="_blank" class="navbar-discord-btn">
-      Join Discord
-    </a>
+  <!-- NAVIGATION OBEN MIT DISCORD-BUTTON -->
+  <nav>
+    <div class="nav-title">Titan Leaks</div>
+    <!-- Discord-Link anpassen -->
+    <a class="discord-btn" href="https://discord.gg/DEIN-EINLADUNGS-LINK" target="_blank">Join Discord</a>
   </nav>
 
-  <!-- Hauptüberschrift -->
-  <h1>Titan Leaks</h1>
-  <p class="subtitle">Hier findest du die neuesten Dateien – völlig ungeschminkt.</p>
+  <!-- HAUPT-HEADER -->
+  <header>
+    <h1>LEAKS & FILES</h1>
+    <p>Die neuesten Dateien findest du hier:</p>
+  </header>
 
-  <!-- Dateiliste -->
-  <div class="file-list-container">
-    <ul id="fileList">
-      <!-- Dateien und Datum werden dynamisch geladen -->
-    </ul>
-  </div>
+  <!-- DYNAMISCHE DATEILISTE -->
+  <ul id="fileList"></ul>
 
   <script>
-    const repo   = "titanxrio/titanteam";  // Dein GitHub-Repository
-    const branch = "main";                 // Branch-Name
-    const folder = "";                     // Ordner (leer lassen für root)
+    const repo = "titanxrio/titanteam"; // Dein GitHub-Repository
+    const branch = "main";             // Branch-Name
+    const folder = "";                 // Ordner (leer lassen für root)
 
-    // Ruft zuerst die Dateien ab und hängt danach für jede Datei das letzte Commit-Datum an
+    // Dateien beim Laden der Seite abrufen
+    document.addEventListener("DOMContentLoaded", fetchFiles);
+
     async function fetchFiles() {
       try {
-        const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`);
+        const response = await fetch(
+          `https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`
+        );
         const files = await response.json();
-
-        // Element für die Liste
         const fileList = document.getElementById("fileList");
         fileList.innerHTML = "";
 
-        // Nur "file"-Typ und nicht index.html
-        const filteredFiles = files.filter(f => f.type === "file" && f.name !== "index.html");
+        for (const file of files) {
+          // Ignoriere index.html & style.css
+          if (
+            file.type === "file" &&
+            file.name !== "index.html" &&
+            file.name !== "style.css"
+          ) {
+            const li = document.createElement("li");
 
-        for (const file of filteredFiles) {
-          const commitDate = await fetchLastCommitDate(file.path);
-          // Neues Listen-Item
-          const li = document.createElement("li");
-          // Kleiner Datums-Text + Download-Link
-          li.innerHTML = `
-            <span class="file-date">Letztes Update: ${commitDate}</span>
-            <a class="download-btn" href="${file.download_url}" download>${file.name}</a>
-          `;
-          fileList.appendChild(li);
+            // Letztes Commit-Datum abrufen
+            const commitDate = await fetchFileDate(file.path);
+            const displayDate = commitDate
+              ? new Date(commitDate).toLocaleString()
+              : "unbekannt";
+
+            li.innerHTML = `
+              <div class="upload-date">Hochgeladen: ${displayDate}</div>
+              <a class="download-btn" href="${file.download_url}" download>
+                ${file.name}
+              </a>
+            `;
+            fileList.appendChild(li);
+          }
         }
-      } catch (err) {
-        console.error("Fehler beim Abrufen der Dateien:", err);
+      } catch (error) {
+        console.error("Fehler beim Laden der Dateien:", error);
       }
     }
 
-    // Holt das letzte Commit und gibt das Commit-Datum zurück
-    async function fetchLastCommitDate(filePath) {
+    // Letztes Commit-Datum für die jeweilige Datei holen
+    async function fetchFileDate(path) {
       try {
-        const commitsResponse = await fetch(
-          \`https://api.github.com/repos/${repo}/commits?path=\${filePath}&sha=${branch}&per_page=1\`
-        );
-        const commits = await commitsResponse.json();
-        if (commits.length > 0) {
-          const isoDate = commits[0].commit.author.date;
-          // Schönes Datumsformat
-          return new Date(isoDate).toLocaleString();
-        } else {
-          return "Keine Informationen";
+        const commitsUrl = `https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(path)}&sha=${branch}&per_page=1`;
+        const response = await fetch(commitsUrl);
+        const commitData = await response.json();
+        if (commitData && commitData.length > 0) {
+          return commitData[0].commit.author.date;
         }
       } catch (err) {
-        console.error("Fehler beim Abrufen des Commits:", err);
-        return "Unbekannt";
+        console.error("Fehler beim Laden des Commit-Datums:", err);
       }
+      return null;
     }
-
-    // Dateien beim Laden der Seite abrufen
-    fetchFiles();
   </script>
 </body>
 </html>
