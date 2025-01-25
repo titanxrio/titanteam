@@ -12,7 +12,29 @@
         <!-- Dateien werden hier dynamisch geladen -->
     </ul>
     <script>
-        // Dynamische Dateiliste (wird unten erklärt)
+        async function fetchFiles() {
+            const repo = "titanxrio/titanteam"; // Dein GitHub-Repository
+            const branch = "main"; // Branch-Name
+            const folder = ""; // Falls die Dateien im Hauptverzeichnis sind
+
+            // GitHub API-Aufruf
+            const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`);
+            const files = await response.json();
+
+            const fileList = document.getElementById("fileList");
+            fileList.innerHTML = ""; // Leeren des Inhalts
+
+            files.forEach(file => {
+                if (file.type === "file") {
+                    const listItem = document.createElement("li");
+                    listItem.innerHTML = `<a href="${file.download_url}" download>${file.name}</a>`;
+                    fileList.appendChild(listItem);
+                }
+            });
+        }
+
+        // Dateien beim Laden der Seite abrufen
+        fetchFiles();
     </script>
 </body>
 </html>
