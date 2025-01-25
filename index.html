@@ -1,156 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titan Team</title>
-    <style>
-        /* BODY-STYLING: Hackermäßiger Look mit Matrix-Vibes */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Consolas, monospace;
-            background-color: #0b0f0f; 
-            color: #00ff9c;
-            text-align: center;
-            /* Coole animierte Hintergrundgrafik (optional) */
-            background-image: radial-gradient(ellipse at center, rgba(0,255,140,0.1) 0%, transparent 70%), 
-                              radial-gradient(ellipse at center, rgba(0,255,140,0.1) 0%, transparent 70%);
-            background-size: 400px 400px;
-            background-position: 0 0, 200px 200px;
-            animation: moveBg 4s linear infinite;
-        }
-
-        @keyframes moveBg {
-            0% {
-                background-position: 0 0, 200px 200px;
-            }
-            50% {
-                background-position: 200px 200px, 0 0;
-            }
-            100% {
-                background-position: 0 0, 200px 200px;
-            }
-        }
-
-        /* TITEL MIT GLITCH-EFFEKT */
-        h1 {
-            margin-top: 50px;
-            font-size: 3rem;
-            color: #00ff9c;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 5px #00ff9c, 0 0 10px #00ff9c, 0 0 20px #00ff9c;
-            animation: glitch 2s infinite;
-        }
-
-        @keyframes glitch {
-            0% {
-                text-shadow: 
-                    0 0 5px #00ff9c, 
-                    0 0 10px #00ff9c,
-                    0 0 20px #00ff9c;
-            }
-            20% {
-                text-shadow: 
-                    -5px 0 5px #ff00ff, 
-                    5px 0 5px #00f0ff;
-            }
-            40% {
-                text-shadow: 
-                    5px 0 5px #ff00ff, 
-                    -5px 0 5px #00f0ff;
-            }
-            60% {
-                text-shadow: 
-                    -5px 0 5px #00f0ff, 
-                    5px 0 5px #ff00ff;
-            }
-            80% {
-                text-shadow: 
-                    5px 0 5px #00f0ff, 
-                    -5px 0 5px #ff00ff;
-            }
-            100% {
-                text-shadow: 
-                    0 0 5px #00ff9c, 
-                    0 0 10px #00ff9c,
-                    0 0 20px #00ff9c;
-            }
-        }
-
-        /* UNTERTITEL / P */
-        p {
-            font-size: 1.2rem;
-            margin: 20px 0 30px 0;
-            color: #00e1ff;
-            text-shadow: 0 0 5px #00e1ff, 0 0 10px #00e1ff;
-        }
-
-        /* UL AND LI-STYLING */
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 auto;
-            display: inline-block;
-            text-align: left;
-        }
-        li {
-            margin: 10px 0;
-        }
-
-        /* LINKS – RICHTIGES HACKER-NEON */
-        a {
-            color: #00ff9c;
-            text-decoration: none;
-            font-size: 1.2rem;
-            background: rgba(0,255,140,0.1);
-            border: 1px solid #00ff9c;
-            border-radius: 4px;
-            padding: 6px 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 8px #00ff9c;
-        }
-        a:hover {
-            background: #00ff9c;
-            color: #0b0f0f;
-            box-shadow: 0 0 12px #00ff9c, 0 0 8px #00ff9c inset;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Titan Leaks</title>
+  <!-- Verknüpfung mit externer CSS-Datei -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>🔥 Titan Leaks 🔥</h1>
+  <!-- NAVBAR MIT DISCORD-BUTTON -->
+  <nav class="navbar">
+    <div class="navbar-title">🔥 Titan Leaks 🔥</div>
+    <a href="https://discord.gg/DEIN-EINLADUNGS-LINK" target="_blank" class="navbar-discord-btn">Join Discord</a>
+  </nav>
+
+  <!-- HAUPTÜBERSCHRIFT -->
+  <header>
+    <h1 class="glitch-text">LEAKS & FILES</h1>
     <p>Hier findest du die neuesten Dateien:</p>
+  </header>
+
+  <!-- DATEILISTE -->
+  <section>
     <ul id="fileList">
-        <!-- Dateien werden hier dynamisch geladen -->
+      <!-- Dateien werden dynamisch geladen -->
     </ul>
+  </section>
 
-    <script>
-        async function fetchFiles() {
-            const repo = "titanxrio/titanteam"; // Dein GitHub-Repository
-            const branch = "main"; // Branch-Name
-            const folder = ""; // Ordner (leer lassen für root)
+  <script>
+    async function fetchFiles() {
+      const repo = "titanxrio/titanteam"; // Dein GitHub-Repository
+      const branch = "main"; // Branch-Name
+      const folder = ""; // Ordner (leer lassen für root)
 
-            // GitHub API-Aufruf
-            const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`);
-            const files = await response.json();
+      // GitHub API-Aufruf
+      const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?ref=${branch}`);
+      const files = await response.json();
 
-            const fileList = document.getElementById("fileList");
-            fileList.innerHTML = ""; // Vorherigen Inhalt leeren
+      const fileList = document.getElementById("fileList");
+      fileList.innerHTML = ""; // Vorherigen Inhalt leeren
 
-            files.forEach(file => {
-                if (file.type === "file" && file.name !== "index.html") { 
-                    // index.html ignorieren
-                    const listItem = document.createElement("li");
-                    listItem.innerHTML = `<a href="${file.download_url}" download>${file.name}</a>`;
-                    fileList.appendChild(listItem);
-                }
-            });
+      files.forEach(file => {
+        if (file.type === "file" && file.name !== "index.html") {
+          // index.html ignorieren
+          const li = document.createElement("li");
+          // Besseres Button-Design
+          li.innerHTML = `
+            <a class="download-btn" href="${file.download_url}" download>
+              <span class="btn-text">${file.name}</span>
+            </a>`;
+          fileList.appendChild(li);
         }
+      });
+    }
 
-        // Dateien beim Laden der Seite abrufen
-        fetchFiles();
-    </script>
+    // Dateien beim Laden der Seite abrufen
+    fetchFiles();
+  </script>
 </body>
 </html>
