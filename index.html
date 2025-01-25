@@ -5,38 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Titan Team</title>
     <style>
+        /* BODY-STYLING: Hackermäßiger Look mit Matrix-Vibes */
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-            color: #ffffff;
-            text-align: center;
             margin: 0;
             padding: 0;
+            font-family: Consolas, monospace;
+            background-color: #0b0f0f; 
+            color: #00ff9c;
+            text-align: center;
+            /* Coole animierte Hintergrundgrafik (optional) */
+            background-image: radial-gradient(ellipse at center, rgba(0,255,140,0.1) 0%, transparent 70%), 
+                              radial-gradient(ellipse at center, rgba(0,255,140,0.1) 0%, transparent 70%);
+            background-size: 400px 400px;
+            background-position: 0 0, 200px 200px;
+            animation: moveBg 4s linear infinite;
         }
+
+        @keyframes moveBg {
+            0% {
+                background-position: 0 0, 200px 200px;
+            }
+            50% {
+                background-position: 200px 200px, 0 0;
+            }
+            100% {
+                background-position: 0 0, 200px 200px;
+            }
+        }
+
+        /* TITEL MIT GLITCH-EFFEKT */
         h1 {
-            margin-top: 20px;
+            margin-top: 50px;
             font-size: 3rem;
-            text-shadow: 2px 2px 4px #000000;
+            color: #00ff9c;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #00ff9c, 0 0 10px #00ff9c, 0 0 20px #00ff9c;
+            animation: glitch 2s infinite;
         }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 
+                    0 0 5px #00ff9c, 
+                    0 0 10px #00ff9c,
+                    0 0 20px #00ff9c;
+            }
+            20% {
+                text-shadow: 
+                    -5px 0 5px #ff00ff, 
+                    5px 0 5px #00f0ff;
+            }
+            40% {
+                text-shadow: 
+                    5px 0 5px #ff00ff, 
+                    -5px 0 5px #00f0ff;
+            }
+            60% {
+                text-shadow: 
+                    -5px 0 5px #00f0ff, 
+                    5px 0 5px #ff00ff;
+            }
+            80% {
+                text-shadow: 
+                    5px 0 5px #00f0ff, 
+                    -5px 0 5px #ff00ff;
+            }
+            100% {
+                text-shadow: 
+                    0 0 5px #00ff9c, 
+                    0 0 10px #00ff9c,
+                    0 0 20px #00ff9c;
+            }
+        }
+
+        /* UNTERTITEL / P */
+        p {
+            font-size: 1.2rem;
+            margin: 20px 0 30px 0;
+            color: #00e1ff;
+            text-shadow: 0 0 5px #00e1ff, 0 0 10px #00e1ff;
+        }
+
+        /* UL AND LI-STYLING */
         ul {
             list-style: none;
             padding: 0;
+            margin: 0 auto;
+            display: inline-block;
+            text-align: left;
         }
         li {
             margin: 10px 0;
         }
+
+        /* LINKS – RICHTIGES HACKER-NEON */
         a {
-            color: #00d4ff;
+            color: #00ff9c;
             text-decoration: none;
             font-size: 1.2rem;
-            border: 2px solid #00d4ff;
-            border-radius: 5px;
-            padding: 5px 10px;
+            background: rgba(0,255,140,0.1);
+            border: 1px solid #00ff9c;
+            border-radius: 4px;
+            padding: 6px 12px;
             transition: all 0.3s ease;
+            box-shadow: 0 0 8px #00ff9c;
         }
         a:hover {
-            background: #00d4ff;
-            color: #000000;
+            background: #00ff9c;
+            color: #0b0f0f;
+            box-shadow: 0 0 12px #00ff9c, 0 0 8px #00ff9c inset;
         }
     </style>
 </head>
@@ -46,6 +125,7 @@
     <ul id="fileList">
         <!-- Dateien werden hier dynamisch geladen -->
     </ul>
+
     <script>
         async function fetchFiles() {
             const repo = "titanxrio/titanteam"; // Dein GitHub-Repository
@@ -60,7 +140,8 @@
             fileList.innerHTML = ""; // Vorherigen Inhalt leeren
 
             files.forEach(file => {
-                if (file.type === "file" && file.name !== "index.html") { // index.html ignorieren
+                if (file.type === "file" && file.name !== "index.html") { 
+                    // index.html ignorieren
                     const listItem = document.createElement("li");
                     listItem.innerHTML = `<a href="${file.download_url}" download>${file.name}</a>`;
                     fileList.appendChild(listItem);
