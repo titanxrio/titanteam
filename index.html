@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -18,7 +18,7 @@
   <!-- HAUPT-HEADER -->
   <header>
     <h1>LEAKS & FILES</h1>
-    <p>Die neuesten Dateien findest du hier:</p>
+    <p>Hier findest du die neuesten Dateien:</p>
   </header>
 
   <!-- DYNAMISCHE DATEILISTE -->
@@ -42,7 +42,7 @@
         fileList.innerHTML = "";
 
         for (const file of files) {
-          // Ignoriere index.html & style.css
+          // Ignorieren von index.html & style.css
           if (
             file.type === "file" &&
             file.name !== "index.html" &&
@@ -50,10 +50,10 @@
           ) {
             const li = document.createElement("li");
 
-            // Letztes Commit-Datum abrufen
+            // Letztes Commit-Datum abrufen (ohne Uhrzeit)
             const commitDate = await fetchFileDate(file.path);
             const displayDate = commitDate
-              ? new Date(commitDate).toLocaleString()
+              ? new Date(commitDate).toLocaleDateString("de-DE")
               : "unbekannt";
 
             li.innerHTML = `
